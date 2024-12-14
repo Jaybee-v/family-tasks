@@ -9,6 +9,7 @@ export class CreateUserUseCase {
     const user = User.create({
       name: commands.name,
       password: commands.password,
+      role: commands.role,
     });
 
     return await this.userInterface.save(user);

@@ -4,6 +4,7 @@ export class User {
     private readonly name: string,
     private readonly password: string,
     private readonly points: number,
+    private readonly role: string,
     private readonly createdAt: Date,
     private readonly updatedAt: Date
   ) {}
@@ -24,6 +25,10 @@ export class User {
     return this.points;
   }
 
+  public getRole(): string {
+    return this.role;
+  }
+
   public getCreatedAt(): Date {
     return this.createdAt;
   }
@@ -32,7 +37,19 @@ export class User {
     return this.updatedAt;
   }
 
-  static create(params: { name: string; password: string }): User {
-    return new User(0, params.name, params.password, 0, new Date(), new Date());
+  static create(params: {
+    name: string;
+    password: string;
+    role: string;
+  }): User {
+    return new User(
+      0,
+      params.name,
+      params.password,
+      0,
+      params.role,
+      new Date(),
+      new Date()
+    );
   }
 }
