@@ -1,10 +1,9 @@
-import RewardForm from "@/components/forms/RewardForm";
-import UserForm from "@/components/forms/UserForm";
+import Sidebar from "@/components/navigation/Navbar";
 
 export default async function Home() {
   return (
-    <div>
-      <UserForm />
-    </div>
+    <main>
+      <Sidebar />
+    </main>
   );
 }
