@@ -5,6 +5,7 @@ export class User {
     private readonly password: string,
     private readonly points: number,
     private readonly role: string,
+    private readonly lastSeen: Date,
     private readonly createdAt: Date,
     private readonly updatedAt: Date
   ) {}
@@ -29,6 +30,10 @@ export class User {
     return this.role;
   }
 
+  public getLastSeen(): Date {
+    return this.lastSeen;
+  }
+
   public getCreatedAt(): Date {
     return this.createdAt;
   }
@@ -48,6 +53,7 @@ export class User {
       params.password,
       0,
       params.role,
+      new Date(),
       new Date(),
       new Date()
     );

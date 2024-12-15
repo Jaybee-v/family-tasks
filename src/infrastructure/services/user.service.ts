@@ -57,10 +57,15 @@ export class UserService implements IUserService {
       throw new Error("User not found");
     }
 
-    let _value: string | number = value;
+    let _value: string | number | Date = value;
     if (key === "points") {
       _value = parseInt(value);
     }
+
+    if (key === "lastSeen") {
+      _value = new Date(value);
+    }
+
     const updatedUser = await prisma.user.update({
       where: { id },
       data: { [key]: _value },

@@ -21,4 +21,12 @@ export class RewardService implements IRewardService {
       throw error;
     }
   }
+
+  async findAll(): Promise<Reward[]> {
+    const rewardsOrm = await prisma.reward.findMany();
+    const rewards = rewardsOrm.map((reward) =>
+      RewardMapper.toDomainEntity(reward)
+    );
+    return rewards;
+  }
 }

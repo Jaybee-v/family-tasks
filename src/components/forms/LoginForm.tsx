@@ -25,13 +25,14 @@ export default function LoginForm() {
       });
 
       const data = await response.json();
-
+      console.log(data);
       if (!response.ok) {
         throw new Error(data.error || "Erreur de connexion");
       }
 
       // Redirection après connexion réussie
-      router.push("/dashboard");
+      router.push("/");
+      router.refresh();
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Une erreur est survenue"

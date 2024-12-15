@@ -21,4 +21,17 @@ export class TaskService implements ITaskService {
       throw error;
     }
   }
+
+  async findAllNextTasks(): Promise<Task[]> {
+    const tasksOrm = await prisma.task.findMany({
+      where: {
+        status: {
+          in: ["pending", "waiting"],
+        },
+      },
+    });
+    console.log(tasksOrm);
+    const tasks = tasksOrm.map((task) => TaskMapper.toDomain(task));
+    return tasks;
+  }
 }

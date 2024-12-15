@@ -13,6 +13,7 @@ export class UserMapper {
       password: user.getPassword(),
       points: user.getPoints(),
       role: user.getRole(),
+      lastSeen: user.getLastSeen(),
       createdAt: user.getCreatedAt(),
       updatedAt: user.getUpdatedAt(),
     };
@@ -28,6 +29,7 @@ export class UserMapper {
       userOrm.password,
       userOrm.points,
       userOrm.role,
+      userOrm.lastSeen,
       userOrm.createdAt,
       userOrm.updatedAt
     );

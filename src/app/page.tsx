@@ -1,9 +1,8 @@
-import Sidebar from "@/components/navigation/Navbar";
-
 export default async function Home() {
   return (
-    <main>
-      <Sidebar />
-    </main>
+    <div>
+      <h1>Home</h1>
+      <p>Home page hxbhjzdbccccccccchbhj</p>
+    </div>
   );
 }

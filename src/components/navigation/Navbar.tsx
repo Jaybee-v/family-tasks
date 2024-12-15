@@ -15,6 +15,7 @@ import {
   Users,
   Menu,
 } from "lucide-react";
+import { logout } from "@/infrastructure/actions/token.actions";
 
 interface SidebarProps {
   role?: "user" | "admin";
@@ -25,7 +26,7 @@ export default function Sidebar({
   role = "admin",
   userName = "Jean-Baptiste",
 }: SidebarProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();
 
@@ -128,8 +129,9 @@ export default function Sidebar({
         {/* Bouton déconnexion */}
         <div className="border-t p-4">
           <button
-            onClick={() => {
+            onClick={async () => {
               /* Logique de déconnexion */
+              await logout();
             }}
             className="flex items-center p-3 w-full rounded-lg text-red-600 hover:bg-red-50"
           >

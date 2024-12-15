@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IUser } from "@/models/User";
+import { Loader } from "lucide-react";
 
 interface TaskFormData {
   userId: number;
@@ -24,6 +25,7 @@ export default function TaskForm() {
   const [users, setUsers] = useState<IUser[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fecthUsers = async () => {
@@ -39,7 +41,7 @@ export default function TaskForm() {
     e.preventDefault();
     setError(null);
     setSuccess(false);
-
+    setIsLoading(true);
     try {
       const response = await fetch("/api/tasks", {
         method: "POST",
@@ -56,26 +58,29 @@ export default function TaskForm() {
         const data = await response.json();
         throw new Error(data.error || "Erreur lors de la création de la tâche");
       }
-
-      setSuccess(true);
-      setFormData({
-        userId: 0,
-        title: "",
-        description: "",
-        points: 0,
-        dueDate: "",
-      });
-
-      router.refresh();
     } catch (error) {
       setError(
         error instanceof Error ? error.message : "Une erreur est survenue"
       );
+    } finally {
+      setSuccess(true);
+      setTimeout(() => {
+        setFormData({
+          userId: 0,
+          title: "",
+          description: "",
+          points: 0,
+          dueDate: "",
+        });
+
+        router.refresh();
+        setIsLoading(false);
+      }, 1000);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-3xl w-full mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-6">Créer une nouvelle tâche</h1>
 
       {error && (
@@ -88,112 +93,121 @@ export default function TaskForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            htmlFor="userId"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Utilisateur assigné
-          </label>
-          <select
-            id="userId"
-            value={formData.userId}
-            onChange={(e) => {
-              setFormData({ ...formData, userId: parseInt(e.target.value) });
-            }}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="0">Choisissez un utilisateur</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </select>
-        </div>
+      <form onSubmit={handleSubmit} className="grid grid-cols-5 gap-4">
+        <section className="col-span-4 space-y-4">
+          <div>
+            <label
+              htmlFor="userId"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Utilisateur assigné
+            </label>
+            <select
+              id="userId"
+              value={formData.userId}
+              onChange={(e) => {
+                setFormData({ ...formData, userId: parseInt(e.target.value) });
+              }}
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="0">Choisissez un utilisateur</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Titre
-          </label>
-          <input
-            id="title"
-            type="text"
-            value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
+          <div>
+            <label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Titre
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={formData.title}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 h-32"
+              required
+            />
+          </div>
+        </section>
+        <section className="space-y-4">
+          <div>
+            <label
+              htmlFor="points"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Points
+            </label>
+            <input
+              id="points"
+              type="number"
+              value={formData.points}
+              onChange={(e) =>
+                setFormData({ ...formData, points: parseInt(e.target.value) })
+              }
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+              required
+              min="0"
+            />
+          </div>
 
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Description
-          </label>
-          <textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 h-32"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="points"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Points
-          </label>
-          <input
-            id="points"
-            type="number"
-            value={formData.points}
-            onChange={(e) =>
-              setFormData({ ...formData, points: parseInt(e.target.value) })
-            }
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-            required
-            min="0"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="dueDate"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Date d'échéance
-          </label>
-          <input
-            id="dueDate"
-            type="datetime-local"
-            value={formData.dueDate}
-            onChange={(e) =>
-              setFormData({ ...formData, dueDate: e.target.value })
-            }
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
+          <div>
+            <label
+              htmlFor="dueDate"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Date d'échéance
+            </label>
+            <input
+              id="dueDate"
+              type="datetime-local"
+              value={formData.dueDate}
+              onChange={(e) =>
+                setFormData({ ...formData, dueDate: e.target.value })
+              }
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+        </section>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
+          disabled={isLoading}
+          className="w-full col-span-5 col-start-5 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
         >
-          Créer la tâche
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <Loader className="animate-spin" />
+              Envoi ...
+            </span>
+          ) : (
+            "Créer la tâche"
+          )}
         </button>
       </form>
     </div>

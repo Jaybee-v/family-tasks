@@ -18,7 +18,7 @@ model User {
   password String
   points Int
   role String 
-
+  lastSeen DateTime @default(now())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -43,6 +43,17 @@ model Reward {
   title   String
   description String
   points Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Token {
+  id     Int      @id @default(autoincrement())
+  userId Int
+  token   String
+  refreshToken String
+  tokenExpiresAt DateTime
+  refreshTokenExpiresAt DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

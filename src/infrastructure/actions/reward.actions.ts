@@ -12,3 +12,8 @@ export async function saveReward(reward: CreateRewardDto): Promise<Reward> {
   );
   return createRewardUseCase.execute(reward);
 }
+
+export async function fetchRewards(): Promise<Reward[]> {
+  const rewardService = new RewardService();
+  return rewardService.findAll();
+}

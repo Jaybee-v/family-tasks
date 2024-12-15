@@ -25,6 +25,11 @@ export async function patchUser(
   return userService.patchUser(id, key, value);
 }
 
+export async function updateLastSeen(id: number): Promise<User> {
+  const userService = new UserService();
+  return userService.patchUser(id, "lastSeen", new Date().toISOString());
+}
+
 export async function findUserByName(name: string): Promise<User | null> {
   const userService = new UserService();
   return userService.findUserByName(name);

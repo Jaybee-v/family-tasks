@@ -55,7 +55,7 @@ export default function RewardForm() {
 
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">Créer une nouvelle récompense</h1>
+      <h2 className="text-2xl font-bold mb-6">Créer une nouvelle récompense</h2>
 
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
