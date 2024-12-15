@@ -46,6 +46,11 @@ export class UserService implements IUserService {
     return UserMapper.toDomainEntity(user);
   }
 
+  async findAllUsers(): Promise<User[]> {
+    const users = await prisma.user.findMany();
+    return users.map((user) => UserMapper.toDomainEntity(user));
+  }
+
   async patchUser(id: number, key: string, value: string): Promise<User> {
     const user = this.findUserById(id);
     if (!user) {

@@ -24,3 +24,13 @@ export async function patchUser(
   const userService = new UserService();
   return userService.patchUser(id, key, value);
 }
+
+export async function findUserByName(name: string): Promise<User | null> {
+  const userService = new UserService();
+  return userService.findUserByName(name);
+}
+
+export async function findAllUsers(): Promise<User[]> {
+  const userService = new UserService();
+  return userService.findAllUsers();
+}
